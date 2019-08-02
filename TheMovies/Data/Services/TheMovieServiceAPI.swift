@@ -68,13 +68,9 @@ final class TheMovieServiceAPI {
                         observer.onError(APIServiceError.invalidResponse)
                         return
                     }
-                    
-                    do {
-                        let values = try self?.jsonDecoder.decode(T.self, from: data)
-                        observer.onNext(.success(values!))
-                    } catch {
-                        observer.onNext(.failure(APIServiceError.decodeError))
-                        return
+
+                    if let values = try? self?.jsonDecoder.decode(T.self, from: data) {
+                        observer.onNext(.success(values))
                     }
                 }
                 

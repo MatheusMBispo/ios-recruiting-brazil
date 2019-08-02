@@ -180,14 +180,14 @@ extension MoviesGridController {
 //MARK: - Configurações das Streams do presenter  -
 extension MoviesGridController {
     func setupPresenterStreams() {
-        presenter.loadMoviesStream.subscribe(onNext: {
+        presenter.loadMoviesStream.observeOn(MainScheduler.instance).subscribe(onNext: {
             [weak self] movies in
             self?.didEndPageLoad(movies: movies)
         }, onError: { [weak self] _ in
             self?.setFeedbackViewState(movies: [], error: true)
         }).disposed(by: disposeBag)
         
-        presenter.reloadMoviesStream.subscribe(onNext: { [weak self] (movies) in
+        presenter.reloadMoviesStream.observeOn(MainScheduler.instance).subscribe(onNext: { [weak self] (movies) in
             self?.movies.onNext(movies)
         }, onError: { [weak self]  _ in
             self?.setFeedbackViewState(movies: [], error: true)
