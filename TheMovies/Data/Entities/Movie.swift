@@ -20,12 +20,31 @@ struct MoviesResponse: Codable {
 }
 
 struct MovieEntity: Codable {
-    let id: Int
-    let title: String
-    let posterPath: String
-    let releaseDate: String
-    let overview: String
-    let genreIds: [Int]
+    var id: Int
+    var title: String
+    var posterPath: String
+    var releaseDate: String
+    var overview: String
+    var genreIds: [Int]
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case title
+        case posterPath
+        case releaseDate
+        case overview
+        case genreIds
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = try container.decodeIfPresent(Int.self, forKey: .id) ?? 0
+        self.title = try container.decodeIfPresent(String.self, forKey: .title) ?? "Title"
+        self.posterPath = try container.decodeIfPresent(String.self, forKey: .posterPath) ?? ""
+        self.releaseDate = try container.decodeIfPresent(String.self, forKey: .releaseDate) ?? "2000-10-01"
+        self.overview = try container.decodeIfPresent(String.self, forKey: .overview) ?? ""
+        self.genreIds = try container.decodeIfPresent([Int].self, forKey: .genreIds) ?? []
+    }
 }
 
 
